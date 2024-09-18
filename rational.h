@@ -17,15 +17,23 @@ class Rational {
 public:
   Rational(int numerator = 0, int denominator = 1) : n(numerator), d(denominator) {}
   Rational(const Rational& rhs) : n(rhs.n), d(rhs.d) {}
-  ~Rational() {}
+  ~Rational() { n = 0; d = 1; }
   int neumerator() const { return n; }
   int denominator() const { return d; }
   Rational reduce() const;
   string str() const;
   string raw_str() const;
   Rational& operator = (const Rational&);
-  Rational& operator + (const Rational&) const;
-  Rational& operator - (const Rational&) const;
-  Rational& operator * (const Rational&) const;
-  Rational& operator / (const Rational&) const;
+  Rational operator + (const Rational&) const;
+  Rational operator - (const Rational&) const;
+  Rational operator * (const Rational&) const;
+  Rational operator / (const Rational&) const;
+};
+
+template<>
+struct std::formatter<Rational>: std::formatter<unsigned> {
+  template<typename FormatContext>
+  auto format(const Rational& o, FormatContext& ctx) {
+    return format_to(ctx.out(), "{}", o.str());
+  }
 };
